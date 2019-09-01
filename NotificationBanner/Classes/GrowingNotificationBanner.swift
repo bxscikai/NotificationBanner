@@ -180,6 +180,83 @@ public class GrowingNotificationBanner: BaseNotificationBanner {
         }
     }
     
+    public init(title: NSAttributedString? = nil,
+                subtitle: NSAttributedString? = nil,
+                leftView: UIView? = nil,
+                rightView: UIView? = nil,
+                style: BannerStyle = .info,
+                colors: BannerColorsProtocol? = nil,
+                iconPosition: IconPosition = .center) {
+        
+        self.leftView = leftView
+        self.rightView = rightView
+        
+        super.init(style: style, colors: colors)
+        
+        let labelsView = UIStackView()
+        labelsView.axis = .vertical
+        labelsView.spacing = innerSpacing
+        
+        let outerStackView = UIStackView()
+        outerStackView.spacing = padding
+        
+        switch iconPosition {
+        case .top:
+            outerStackView.alignment = .top
+        case .center:
+            outerStackView.alignment = .center
+        }
+        
+        if let leftView = leftView {
+            outerStackView.addArrangedSubview(leftView)
+            
+            leftView.snp.makeConstraints { $0.size.equalTo(iconSize) }
+        }
+        
+        outerStackView.addArrangedSubview(labelsView)
+        
+        if let title = title {
+            titleLabel = UILabel()
+            titleLabel!.font = titleFont
+            titleLabel!.numberOfLines = 0
+            titleLabel!.textColor = .white
+            titleLabel!.attributedText = title
+            titleLabel!.setContentHuggingPriority(.required, for: .vertical)
+            labelsView.addArrangedSubview(titleLabel!)
+        }
+        
+        if let subtitle = subtitle {
+            subtitleLabel = UILabel()
+            subtitleLabel!.font = subtitleFont
+            subtitleLabel!.numberOfLines = 0
+            subtitleLabel!.textColor = .white
+            subtitleLabel!.attributedText = subtitle
+            if title == nil {
+                subtitleLabel!.setContentHuggingPriority(.required, for: .vertical)
+            }
+            labelsView.addArrangedSubview(subtitleLabel!)
+        }
+        
+        if let rightView = rightView {
+            outerStackView.addArrangedSubview(rightView)
+            
+            rightView.snp.makeConstraints { $0.size.equalTo(iconSize) }
+        }
+        
+        contentView.addSubview(outerStackView)
+        outerStackView.snp.makeConstraints { (make) in
+            if #available(iOS 11.0, *) {
+                make.left.equalTo(safeAreaLayoutGuide).offset(padding)
+                make.right.equalTo(safeAreaLayoutGuide).offset(-padding)
+            } else {
+                make.left.equalToSuperview().offset(padding)
+                make.right.equalToSuperview().offset(-padding)
+            }
+            
+            make.centerY.equalToSuperview()
+        }
+    }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
