@@ -221,6 +221,7 @@ public class GrowingNotificationBanner: BaseNotificationBanner {
             titleLabel!.numberOfLines = 0
             titleLabel!.textColor = .white
             titleLabel!.attributedText = title
+            titleLabel!.textAlignment = .center
             titleLabel!.setContentHuggingPriority(.required, for: .vertical)
             labelsView.addArrangedSubview(titleLabel!)
         }
@@ -231,6 +232,7 @@ public class GrowingNotificationBanner: BaseNotificationBanner {
             subtitleLabel!.numberOfLines = 0
             subtitleLabel!.textColor = .white
             subtitleLabel!.attributedText = subtitle
+            subtitleLabel!.textAlignment = .center
             if title == nil {
                 subtitleLabel!.setContentHuggingPriority(.required, for: .vertical)
             }
